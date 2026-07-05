@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:laws.e-gov.go.jp)",
+      "WebFetch(domain:www.ppc.go.jp)",
+      "WebSearch",
+      "Bash(curl -sL \"https://www.ppc.go.jp/all_faq_index/faq1-q11-1/\" -o /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/ppc_faq1-q11-1.html --max-time 30 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36\")",
+      "Bash(echo \"exit:$?\")",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0 Safari/537.36\" \"https://www.medical-care.net/misc/terms/medical\" -o /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/mcs_terms.html)",
+      "Bash(python3 -c \"import PyPDF2\")",
+      "Bash(pdftotext -layout \"/Users/taitoito/.claude/projects/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/tool-results/webfetch-1783230486725-roxgvc.pdf\" /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/mhlw_v7_system.txt)"
+    ]
+  }
+}
