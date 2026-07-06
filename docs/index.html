@@ -2,97 +2,283 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#0f5e75">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c1920">
 <title>訪問看護ステーション 情報管理・請求管理 改善キット(統合版)</title>
 <style>
+/* ===== テーマ変数(ライト) ===== */
 :root{
-  --ink:#1c2733; --sub:#5a6b7b; --line:#dbe3ea; --bg:#f5f7f9; --card:#ffffff;
+  --ink:#1c2733; --sub:#51626f; --line:#dbe3ea; --bg:#f2f5f7; --card:#ffffff;
   --accent:#0f5e75; --accent2:#0b7a5c; --warnbg:#fff7e6; --mark:#c0392b;
+  --code-bg:#eef1f4; --pre-bg:#0e1e28; --pre-ink:#dfe9ef;
+  --xref-bg:#e3eff4; --chip-bg:#eef4f7; --chip-ink:#25566b; --chip-line:#cfdfe7; --chip-hov:#dcebf1;
+  --thead-bg:#eef4f7; --thead-ink:#123f50; --row-alt:#f7fafb; --h4-ink:#123f50;
+  --quote-line:#c9a75a; --quote-bg:#fdf9ef; --quote-ink:#4c4432;
+  --ok:#0b7a5c; --warn:#8a5410;
+  --res-tag:#5a7b8d; --res-line:#8aa5b3; --ref-line:#7c6bb0;
+  --nav-bg:#122a38; --nav-ink:#cfdde6; --nav-line:#24455a; --nav-dim:#8fa9ba; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
+  --topbar-bg:#0f5e75; --topbar-ink:#ffffff; --focus:#1a7fa0;
+  --hl:#ffe27a; --hl-ink:#3a2c00;
+  --shadow:0 6px 24px rgba(15,40,55,.2);
+  --topbar-h:52px;
 }
+@media (prefers-color-scheme:dark){
+  :root{
+    --ink:#dde6ed; --sub:#9db0bf; --line:#2c3d4a; --bg:#0c1920; --card:#132530;
+    --accent:#6cbcd8; --accent2:#5cc2a4; --warnbg:#2a2211; --mark:#f08a7c;
+    --code-bg:#1c3240; --pre-bg:#0a141b; --pre-ink:#cfdde6;
+    --xref-bg:#173648; --chip-bg:#17303d; --chip-ink:#a8cddd; --chip-line:#2c4757; --chip-hov:#1d3c4c;
+    --thead-bg:#17303d; --thead-ink:#bcd7e4; --row-alt:#10202a; --h4-ink:#a8cddd;
+    --quote-line:#a98d4b; --quote-bg:#211d10; --quote-ink:#e4d9bd;
+    --ok:#5cc2a4; --warn:#e0a35c;
+    --res-tag:#42606f; --res-line:#54707e; --ref-line:#9b8ccc;
+    --nav-bg:#0e2230; --nav-ink:#c5d5df; --nav-line:#24455a; --nav-dim:#7f9cb0; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
+    --topbar-bg:#0e2735; --topbar-ink:#e8f1f6; --focus:#6cbcd8;
+    --hl:#8a6d1a; --hl-ink:#fff6dd;
+    --shadow:0 6px 24px rgba(0,0,0,.55);
+  }
+}
+/* ===== ベース ===== */
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%}
+html[data-fs="l"]{font-size:18px}
+html[data-fs="xl"]{font-size:20px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+[hidden]{display:none!important}
 body{margin:0;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic",Meiryo,sans-serif;
-  color:var(--ink);background:var(--bg);line-height:1.85;font-size:15.5px;}
+  color:var(--ink);background:var(--bg);line-height:1.9;font-size:1rem}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+[id]{scroll-margin-top:calc(var(--topbar-h) + env(safe-area-inset-top) + 14px)}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
-a.xref{background:#eaf3f6;border-radius:4px;padding:0 4px}
-code{background:#eef1f4;border-radius:4px;padding:1px 5px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace}
-pre{background:#0e1e28;color:#dfe9ef;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.6;
-  font-family:ui-monospace,Menlo,Consolas,monospace}
-.layout{display:flex;min-height:100vh}
-nav#sidebar{width:296px;flex:0 0 296px;background:#122a38;color:#cfdde6;padding:18px 0 40px;
-  position:sticky;top:0;height:100vh;overflow-y:auto}
-nav#sidebar .brand{padding:6px 18px 14px;border-bottom:1px solid #24455a;margin-bottom:10px}
-nav#sidebar .brand b{color:#fff;font-size:15px;display:block;line-height:1.5}
-nav#sidebar .brand small{color:#8fa9ba}
-nav#sidebar .group{padding:10px 18px 2px;font-size:11px;letter-spacing:.12em;color:#7f9cb0}
-nav#sidebar a.item{display:block;padding:6px 18px 6px 24px;color:#cfdde6;font-size:13.5px;border-left:3px solid transparent}
-nav#sidebar a.item:hover{background:#1a3a4d;text-decoration:none}
-nav#sidebar a.item.active{background:#1a3a4d;border-left-color:#4fc3a1;color:#fff}
-main{flex:1;min-width:0;padding:34px 46px 90px;max-width:980px;margin:0 auto}
-header.page h1{font-size:25px;line-height:1.5;margin:0 0 4px}
-header.page .meta{color:var(--sub);font-size:13px}
-.legend{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:18px 0 30px;font-size:13.5px}
+main a[target="_blank"]::after{content:"↗";font-size:.72em;margin-left:1px;opacity:.72}
+a.xref{background:var(--xref-bg);border-radius:6px;padding:2px 8px;display:inline-block;line-height:1.6}
+code{background:var(--code-bg);border-radius:4px;padding:1px 5px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere}
+pre{background:var(--pre-bg);color:var(--pre-ink);padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:.78rem;line-height:1.6;
+  margin:14px 0;font-family:ui-monospace,Menlo,Consolas,monospace}
+.skip{position:fixed;left:10px;top:-70px;z-index:200;background:var(--card);color:var(--accent);padding:12px 18px;border-radius:10px;box-shadow:var(--shadow);transition:top .15s}
+.skip:focus{top:calc(var(--topbar-h) + env(safe-area-inset-top) + 8px)}
+/* ===== 固定トップバー ===== */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;gap:4px;
+  background:var(--topbar-bg);color:var(--topbar-ink);
+  height:calc(var(--topbar-h) + env(safe-area-inset-top));
+  padding:env(safe-area-inset-top) max(8px,env(safe-area-inset-right)) 0 max(8px,env(safe-area-inset-left))}
+#topbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  min-width:48px;min-height:44px;padding:3px 8px;background:transparent;border:none;border-radius:9px;
+  color:var(--topbar-ink);font-size:.65rem;line-height:1.2;cursor:pointer;font-family:inherit}
+#topbar button .i{font-size:1.05rem;line-height:1.1}
+#topbar button:hover{background:rgba(255,255,255,.15)}
+#topbar-title{flex:1;min-width:0;text-align:center;font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.18)}
+#progress i{display:block;height:100%;width:0;background:var(--nav-on)}
+/* ===== レイアウト ===== */
+.layout{display:flex;min-height:100vh;padding-top:calc(var(--topbar-h) + env(safe-area-inset-top))}
+main{flex:1;min-width:0;max-width:980px;margin:0 auto;width:100%;
+  padding:16px 14px calc(96px + env(safe-area-inset-bottom))}
+header.page h1{font-size:1.4rem;line-height:1.55;margin:6px 0 4px;word-break:auto-phrase}
+header.page .meta{color:var(--sub);font-size:.82rem}
+.legend{background:var(--warnbg);border:1px solid var(--quote-line);border-radius:12px;padding:14px 18px;margin:16px 0 24px;font-size:.85rem}
 .legend b{color:var(--accent)}
-section.doc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:30px 36px 36px;margin:0 0 34px;
-  scroll-margin-top:16px}
-section.doc>h2.docttl{font-size:21px;line-height:1.5;margin:0 0 2px;padding-bottom:12px;border-bottom:2px solid var(--accent)}
-.chapter-tag{display:inline-block;background:var(--accent);color:#fff;font-size:12px;border-radius:5px;
+/* ===== ドロワー / サイドバー ===== */
+nav#sidebar{position:fixed;z-index:120;top:0;bottom:0;left:0;width:min(320px,88vw);height:100dvh;
+  transform:translateX(-105%);transition:transform .22s;visibility:hidden;
+  background:var(--nav-bg);color:var(--nav-ink);overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(12px + env(safe-area-inset-top)) 0 calc(30px + env(safe-area-inset-bottom));box-shadow:none}
+nav#sidebar.open{transform:none;visibility:visible;box-shadow:var(--shadow)}
+#scrim{position:fixed;inset:0;z-index:110;background:rgba(8,20,28,.55);opacity:0;pointer-events:none;transition:opacity .2s}
+body.drawer-open #scrim{opacity:1;pointer-events:auto}
+nav#sidebar .brand{padding:6px 18px 14px;border-bottom:1px solid var(--nav-line);margin-bottom:8px}
+nav#sidebar .brand b{color:#fff;font-size:.92rem;display:block;line-height:1.5}
+nav#sidebar .brand small{color:var(--nav-dim);font-size:.75rem}
+nav#sidebar .group{padding:14px 18px 4px;font-size:.7rem;letter-spacing:.12em;color:var(--nav-dim)}
+nav#sidebar a.item{display:flex;align-items:center;min-height:48px;position:relative;
+  padding:6px 44px 6px 21px;color:var(--nav-ink);font-size:.86rem;line-height:1.5;border-left:3px solid transparent}
+nav#sidebar a.item:hover{background:var(--nav-hov);text-decoration:none}
+nav#sidebar a.item.active{background:var(--nav-hov);border-left-color:var(--nav-on);color:#fff}
+nav#sidebar a.item.read::after{content:"✓ 読了";position:absolute;right:12px;color:var(--nav-on);font-size:.68rem;font-weight:700}
+#navtools{margin:18px 14px 0;padding:16px 8px 0;border-top:1px solid var(--nav-line);display:grid;gap:16px;font-size:.8rem;color:var(--nav-dim)}
+#navtools .lbl{display:block;margin-bottom:7px}
+#fs-switch{display:flex;gap:8px}
+#fs-switch button{flex:1;min-height:44px;border:1px solid var(--nav-line);background:transparent;color:var(--nav-ink);
+  border-radius:9px;cursor:pointer;font-family:inherit;font-size:.82rem}
+#fs-switch button[data-fs="l"]{font-size:.95rem}
+#fs-switch button[data-fs="xl"]{font-size:1.1rem}
+#fs-switch button[aria-pressed="true"]{background:var(--nav-on);border-color:var(--nav-on);color:#08231b;font-weight:700}
+#modetgl{display:flex;align-items:center;gap:10px;min-height:44px;color:var(--nav-ink);cursor:pointer}
+#modetgl input{width:20px;height:20px;accent-color:var(--nav-on);margin:0;flex:none}
+/* ===== 章(カード) ===== */
+section.doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px 26px;margin:0 0 24px}
+section.doc>h2.docttl{font-size:1.28rem;line-height:1.5;margin:0 0 2px;padding-bottom:12px;border-bottom:2px solid var(--accent);word-break:auto-phrase}
+.chapter-tag{display:inline-block;background:var(--accent);color:#fff;font-size:.72rem;border-radius:6px;
   padding:2px 10px;margin-right:10px;vertical-align:3px;letter-spacing:.06em}
-section.doc.res>h2.docttl{border-bottom-color:#8aa5b3}
-section.doc.res .chapter-tag{background:#5a7b8d}
-.src-note{color:var(--sub);font-size:12.5px;margin:6px 0 0}
-.minitoc{margin:14px 0 6px;display:flex;flex-wrap:wrap;gap:6px}
-.minitoc a{font-size:12px;background:#eef4f7;border:1px solid var(--line);border-radius:99px;padding:2px 11px;color:#2c586c}
-.minitoc a:hover{background:#dcebf1;text-decoration:none}
-h3{font-size:17.5px;margin:34px 0 10px;padding-left:10px;border-left:4px solid var(--accent2);line-height:1.5;scroll-margin-top:18px}
-h4{font-size:15.5px;margin:24px 0 8px;color:#123f50;scroll-margin-top:18px}
+@media (prefers-color-scheme:dark){.chapter-tag{color:#06222e}}
+section.doc.res>h2.docttl{border-bottom-color:var(--res-line)}
+section.doc.res .chapter-tag{background:var(--res-tag)}
+@media (prefers-color-scheme:dark){section.doc.res .chapter-tag{color:#e8f1f6}}
+.src-note{color:var(--sub);font-size:.78rem;margin:6px 0 0}
+.minitoc{margin:14px 0 6px;display:flex;flex-wrap:wrap;gap:8px}
+.minitoc a{font-size:.8rem;background:var(--chip-bg);border:1px solid var(--chip-line);border-radius:99px;padding:9px 14px;color:var(--chip-ink);line-height:1.4}
+.minitoc a:hover{background:var(--chip-hov);text-decoration:none}
+h3{font-size:1.1rem;margin:34px 0 10px;padding-left:10px;border-left:4px solid var(--accent2);line-height:1.6;word-break:auto-phrase}
+h4{font-size:1rem;margin:24px 0 8px;color:var(--h4-ink);word-break:auto-phrase}
 p{margin:10px 0}
-blockquote{margin:14px 0;padding:10px 18px;border-left:4px solid #c9a75a;background:#fdf9ef;border-radius:0 8px 8px 0;
-  color:#4c4432;font-size:14.5px}
+p,li,blockquote{text-wrap:pretty;overflow-wrap:break-word}
+blockquote{margin:14px 0;padding:12px 16px;border-left:4px solid var(--quote-line);background:var(--quote-bg);border-radius:0 10px 10px 0;
+  color:var(--quote-ink);font-size:.93rem}
 blockquote p{margin:0}
-ul,ol{margin:10px 0;padding-left:26px}
-li{margin:4px 0}
+ul,ol{margin:10px 0;padding-left:24px}
+li{margin:6px 0}
 hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
-.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:13.8px;background:#fff}
-th,td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top;min-width:70px}
-th{background:#eef4f7;color:#123f50;white-space:nowrap}
-tr:nth-child(even) td{background:#fafcfd}
-.ok{color:var(--accent2)}
-.warn{color:#b3701a}
-sup.cite a{font-size:11px;background:#eaf3f6;border-radius:4px;padding:0 3px}
-p.refitem{font-size:13.5px;color:#33454f;margin:6px 0;padding-left:2.4em;text-indent:-2.4em;scroll-margin-top:18px}
-#references h3{border-left-color:#7c6bb0}
+.ok{color:var(--ok)}
+.warn{color:var(--warn)}
+sup.cite a{font-size:.72rem;background:var(--xref-bg);border-radius:6px;padding:3px 6px;line-height:1;display:inline-block}
+p.refitem{font-size:.85rem;color:var(--ink);margin:8px 0;padding-left:2.4em;text-indent:-2.4em}
+#references h3{border-left-color:var(--ref-line)}
 #references ul{list-style:none;padding-left:6px}
-#references li{margin:7px 0;font-size:13.8px;padding-left:1em;text-indent:-1em}
-#references li .url{color:var(--sub);font-size:12.5px;word-break:break-all}
-#totop{position:fixed;right:22px;bottom:22px;background:var(--accent);color:#fff;border-radius:99px;
-  padding:9px 15px;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
-#totop:hover{text-decoration:none;background:#0c4b5e}
-#menubtn{display:none}
-@media(max-width:900px){
-  nav#sidebar{position:fixed;left:-300px;transition:left .2s;z-index:50}
-  nav#sidebar.open{left:0}
-  #menubtn{display:block;position:fixed;left:14px;top:12px;z-index:60;background:var(--accent);color:#fff;
-    border:none;border-radius:8px;padding:8px 12px;font-size:14px}
-  main{padding:60px 16px 80px}
-  section.doc{padding:22px 16px 26px}
+#references li{margin:9px 0;font-size:.86rem;padding-left:1em;text-indent:-1em}
+#references li .url{color:var(--sub);font-size:.78rem;word-break:break-all}
+/* ===== テーブル ===== */
+.tableshell{position:relative;margin:16px 0}
+.tableshell::before,.tableshell::after{content:"";position:absolute;top:0;bottom:0;width:16px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:2}
+.tableshell::before{left:0;background:linear-gradient(90deg,rgba(8,22,32,.22),transparent);border-radius:10px 0 0 10px}
+.tableshell::after{right:0;background:linear-gradient(-90deg,rgba(8,22,32,.22),transparent);border-radius:0 10px 10px 0}
+.tableshell.more-l::before{opacity:1}
+.tableshell.more-r::after{opacity:1}
+.tableshell pre{margin:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);-webkit-overflow-scrolling:touch}
+.tableshell .tablewrap{margin:0}
+.tablewrap{margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem;line-height:1.7;background:var(--card)}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--thead-bg);color:var(--thead-ink);white-space:nowrap}
+tr:nth-child(even) td{background:var(--row-alt)}
+.tableshell[data-tbl="scroll"] td,.tableshell[data-tbl="scroll"] th{min-width:9em}
+.tableshell[data-tbl="scroll"] td:first-child,.tableshell[data-tbl="scroll"] th:first-child{position:sticky;left:0;background:var(--card);box-shadow:1px 0 0 var(--line);z-index:1;min-width:7em;max-width:38vw}
+.tableshell[data-tbl="scroll"] tr:nth-child(even) td:first-child{background:var(--row-alt)}
+.tableshell[data-tbl="scroll"] th:first-child{background:var(--thead-bg)}
+.tbl-hint{display:block;text-align:center;font-size:.75rem;color:var(--sub);margin:6px 0 0}
+@media(max-width:700px){
+  .tableshell[data-tbl="cards"]::before,.tableshell[data-tbl="cards"]::after{content:none}
+  .tableshell[data-tbl="cards"] .tablewrap{overflow:visible;border:none;border-radius:0;background:none}
+  .tableshell[data-tbl="cards"] table,.tableshell[data-tbl="cards"] tbody{display:block;background:none}
+  .tableshell[data-tbl="cards"] tr{display:block;border:1px solid var(--line);border-radius:12px;background:var(--card);margin:0 0 12px;padding:6px 14px 14px;box-shadow:0 1px 3px rgba(15,40,55,.07)}
+  .tableshell[data-tbl="cards"] tr.hdr{display:none}
+  .tableshell[data-tbl="cards"] td{display:block;border:none;padding:9px 0 0;background:none!important}
+  .tableshell[data-tbl="cards"] td+td{border-top:1px dashed var(--line);margin-top:9px}
+  .tableshell[data-tbl="cards"] td::before{content:attr(data-label);display:block;font-size:.76rem;font-weight:700;color:var(--accent);margin-bottom:2px}
 }
+/* ===== 前後章ナビ / 先頭へ ===== */
+.chapnav{display:flex;gap:10px;margin:32px 0 0;padding-top:18px;border-top:1px dashed var(--line)}
+.chapnav a{flex:1;display:block;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:62px;background:var(--bg)}
+.chapnav a:hover{text-decoration:none;border-color:var(--accent)}
+.chapnav a.next{text-align:right}
+.chapnav .dir{display:block;font-size:.72rem;color:var(--sub)}
+.chapnav .t{font-size:.85rem;font-weight:600;color:var(--accent);line-height:1.5}
+#totop{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:70;background:var(--accent);color:#fff;border-radius:99px;
+  padding:12px 16px;font-size:.8rem;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .2s}
+@media (prefers-color-scheme:dark){#totop{color:#06222e}}
+body.scrolled #totop{opacity:1;pointer-events:auto}
+#totop:hover{text-decoration:none}
+html:not(.js) #totop{opacity:1;pointer-events:auto}
+html:not(.js) #topbar #menubtn,html:not(.js) #topbar #searchbtn{display:none}
+/* ===== 章モード(JS有効時のみ) ===== */
+html.js body[data-mode="chapter"] section.doc{display:none}
+html.js body[data-mode="chapter"] section.doc.current{display:block}
+html.js body[data-mode="chapter"]:not([data-current="doc00"]) header.page,
+html.js body[data-mode="chapter"]:not([data-current="doc00"]) .legend{display:none}
+/* ===== ダイアログ(脚注シート・検索) ===== */
+dialog{border:none;padding:0;background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(8,20,28,.55)}
+#refsheet{width:min(680px,100%);margin:auto auto 0;border-radius:16px 16px 0 0;max-height:75dvh;display:flex;flex-direction:column}
+#refsheet:not([open]){display:none}
+#refsheet .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);flex:none}
+#refsheet .bar b{font-size:.9rem}
+#refsheet .body{padding:14px 18px calc(20px + env(safe-area-inset-bottom));overflow:auto;font-size:.92rem}
+#refsheet .body p.refitem{padding-left:0;text-indent:0;font-size:.92rem}
+#refsheet .golink{margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line);font-size:.85rem}
+dialog .close{min-height:44px;min-width:64px;border:none;background:var(--chip-bg);border-radius:10px;color:var(--chip-ink);font-size:.85rem;padding:0 14px;cursor:pointer;font-family:inherit;flex:none}
+#searchdlg{width:100%;height:100dvh;max-height:100dvh;max-width:none;margin:0;background:var(--bg);display:flex;flex-direction:column}
+#searchdlg:not([open]){display:none}
+#searchform{display:flex;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:var(--card);border-bottom:1px solid var(--line);margin:0;flex:none}
+#q{flex:1;min-width:0;min-height:46px;font-size:1rem;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-family:inherit}
+#results{padding:10px 14px calc(30px + env(safe-area-inset-bottom));overflow:auto;flex:1}
+#results .grp{font-size:.78rem;color:var(--sub);margin:16px 2px 6px;letter-spacing:.05em;font-weight:700}
+#results a.hit{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:0 0 8px;color:var(--ink);font-size:.88rem;line-height:1.75}
+#results a.hit:hover{border-color:var(--accent);text-decoration:none}
+#results .empty{color:var(--sub);text-align:center;padding:40px 0;font-size:.9rem}
+mark{background:var(--hl);color:var(--hl-ink);border-radius:3px;padding:0 1px}
+@keyframes hitflash{0%,55%{background:color-mix(in srgb,var(--hl) 42%,transparent)}100%{background:transparent}}
+.hitflash{animation:hitflash 1.8s ease-out}
+/* ===== デスクトップ(2カラム) ===== */
+@media(min-width:961px){
+  #topbar #menubtn,#scrim{display:none}
+  nav#sidebar{position:sticky;top:calc(var(--topbar-h) + env(safe-area-inset-top));transform:none;transition:none;visibility:visible;
+    flex:0 0 300px;width:300px;height:calc(100dvh - var(--topbar-h) - env(safe-area-inset-top));box-shadow:none;padding-top:14px}
+  main{padding:28px 44px calc(120px + env(safe-area-inset-bottom))}
+  section.doc{padding:30px 36px 36px}
+  #searchdlg{width:min(720px,92vw);height:auto;max-height:82dvh;margin:6dvh auto auto;border-radius:14px}
+  #searchform{padding:12px 14px}
+  #refsheet{margin:auto;border-radius:16px}
+}
+/* ===== 印刷 ===== */
 @media print{
-  nav#sidebar,#totop,#menubtn{display:none!important}
-  body{background:#fff}
+  #topbar,nav#sidebar,#totop,#scrim,#menubtn,.chapnav,dialog,.skip,.tbl-hint{display:none!important}
+  body{background:#fff;color:#000}
+  .layout{padding-top:0}
+  html.js body[data-mode="chapter"] section.doc{display:block!important}
+  html.js body[data-mode="chapter"] header.page,html.js body[data-mode="chapter"] .legend{display:block!important}
   section.doc{border:none;page-break-before:always;padding:0}
   a{color:inherit}
+  main a[target="_blank"]::after{content:""}
+  .tableshell[data-tbl="scroll"] td:first-child,.tableshell[data-tbl="scroll"] th:first-child{position:static;box-shadow:none}
 }
 </style>
 </head>
-<body id="top">
-<button id="menubtn">☰ 目次</button>
+<body id="top" data-mode="chapter" data-current="doc00">
+<a class="skip" href="#content">本文へスキップ</a>
+<header id="topbar">
+  <button id="menubtn" type="button" aria-controls="sidebar" aria-expanded="false"><span class="i" aria-hidden="true">☰</span>目次</button>
+  <div id="topbar-title">改善キット</div>
+  <button id="searchbtn" type="button" hidden><span class="i" aria-hidden="true">🔍</span>検索</button>
+  <div id="progress" aria-hidden="true"><i></i></div>
+</header>
 <div class="layout">
-<nav id="sidebar"><div class="brand"><b>訪問看護ステーション<br>情報管理・請求管理 改善キット</b><small>統合版 / 作成日 2026-07-05</small></div><div class="group">本編</div><a class="item" href="#doc00">第0章 サマリー(全体像)</a><a class="item" href="#doc01">第1章 法令とペナルティ</a><a class="item" href="#doc02">第2章 保険種別と訪問時間の要件</a><a class="item" href="#doc03">第3章 他ステーションの標準対策</a><a class="item" href="#doc04">第4章 行動計画</a><a class="item" href="#doc05">第5章 説得資料(提案書)</a><div class="group">調査原資料(付録)</div><a class="item" href="#resA">付録A 法令と罰則(原資料)</a><a class="item" href="#resA3">付録A3 報酬と時間区分(原資料)</a><a class="item" href="#resA5">付録A5 セキュリティ関連法規(原資料)</a><a class="item" href="#resA9">付録A9 不正類型・労基・公益通報(原資料)</a><a class="item" href="#resB">付録B 業界標準対策と費用(原資料)</a><a class="item" href="#resC">付録C 処分と漏えいの実例(原資料)</a><div class="group">巻末</div><a class="item" href="#references">統合参考文献リスト</a></nav>
-<main>
-<header class="page"><h1>訪問看護ステーション 情報管理・請求管理 改善キット(統合版)</h1><div class="meta">作成日: 2026-07-05 ─ 本編5資料+調査原資料6資料+統合参考文献を1ファイルに統合。左の目次または各章冒頭のチップから移動できます。</div></header>
+<nav id="sidebar" aria-label="章目次">
+  <div class="brand"><b>訪問看護ステーション<br>情報管理・請求管理 改善キット</b><small>統合版 / 作成日 2026-07-05</small></div>
+  <div class="group">本編</div>
+  <a class="item" href="#doc00">第0章 サマリー(全体像)</a>
+  <a class="item" href="#doc01">第1章 法令とペナルティ</a>
+  <a class="item" href="#doc02">第2章 保険種別と訪問時間の要件</a>
+  <a class="item" href="#doc03">第3章 他ステーションの標準対策</a>
+  <a class="item" href="#doc04">第4章 行動計画</a>
+  <a class="item" href="#doc05">第5章 説得資料(提案書)</a>
+  <div class="group">調査原資料(付録)</div>
+  <a class="item" href="#resA">付録A 法令と罰則(原資料)</a>
+  <a class="item" href="#resA3">付録A3 報酬と時間区分(原資料)</a>
+  <a class="item" href="#resA5">付録A5 セキュリティ関連法規(原資料)</a>
+  <a class="item" href="#resA9">付録A9 不正類型・労基・公益通報(原資料)</a>
+  <a class="item" href="#resB">付録B 業界標準対策と費用(原資料)</a>
+  <a class="item" href="#resC">付録C 処分と漏えいの実例(原資料)</a>
+  <div class="group">巻末</div>
+  <a class="item" href="#references">統合参考文献リスト</a>
+  <div id="navtools" hidden>
+    <div><span class="lbl" id="fs-lbl">文字サイズ</span>
+      <div id="fs-switch" role="group" aria-labelledby="fs-lbl">
+        <button type="button" data-fs="" aria-pressed="true">標準</button>
+        <button type="button" data-fs="l" aria-pressed="false">大</button>
+        <button type="button" data-fs="xl" aria-pressed="false">特大</button>
+      </div>
+    </div>
+    <label id="modetgl"><input type="checkbox" id="modechk">全章を通して表示(通読モード)</label>
+  </div>
+</nav>
+<div id="scrim" hidden></div>
+<main id="content">
+<header class="page"><h1>訪問看護ステーション 情報管理・請求管理 改善キット(統合版)</h1><div class="meta">作成日: 2026-07-05 ─ 本編5資料+調査原資料6資料+統合参考文献を1ファイルに統合。「目次」ボタン・各章冒頭のチップ・章末の前後リンクから移動できます。</div></header>
 <div class="legend"><b>凡例と注意</b> ─ <span class="ok">✅</span>=一次ソース(e-Gov・厚労省・個人情報保護委員会・自治体公表資料等)で原文確認済み(2026年7月5日時点)/<span class="warn">⚠️</span>・【未確認】=二次情報・試算・類推(断定に使わない)。本資料は一般的な法令情報の整理であり法律相談の代替ではありません。重要な判断(エスカレーション・退職・通報等)の前には弁護士等への相談を推奨します。この資料に職場名・実名を書き足さないでください。</div>
 <section class="doc" id="doc00"><h2 class="docttl"><span class="chapter-tag">第0章</span>00 サマリー ― 全体像を5分でつかむ</h2><p class="src-note">原本ファイル: <code>00_サマリー.md</code></p><div class="minitoc"><a href="#doc00-s1">1. 30秒でわかる全体像</a><a href="#doc00-s2">2. リスク早見表(何を破ると、何が起きるか)</a><a href="#doc00-s3">3. 対策: 3段階プラン(7名規模・月額)</a><a href="#doc00-s4">4. 行動計画: Phase 0〜3 + 撤退ライン</a><a href="#doc00-s5">5. 文書マップ(どれに何が書いてあるか)</a><a href="#doc00-s6">6. 信頼性の表記と取り扱い上の注意</a></div><p>作成日: 2026-07-05<br>本ファイルは各資料の要約です。金額・条文の根拠と出典はすべて各資料本文(01〜05、<code>_research/</code>)にあります。</p>
 <hr>
@@ -857,16 +1043,353 @@ p.refitem{font-size:13.5px;color:#33454f;margin:6px 0;padding-left:2.4em;text-in
 <a id="totop" href="#top">▲ 先頭へ</a>
 </main>
 </div>
+<dialog id="refsheet" aria-label="出典の参照">
+  <div class="bar"><b>出典・参照</b><button class="close" type="button">閉じる</button></div>
+  <div class="body" id="refsheet-body"></div>
+</dialog>
+<dialog id="searchdlg" aria-label="全文検索">
+  <form id="searchform" role="search">
+    <input id="q" type="search" placeholder="全文検索(例: 加算金 / MCS)" autocomplete="off" aria-label="検索語">
+    <button class="close" type="button" id="searchclose">閉じる</button>
+  </form>
+  <div id="results" aria-live="polite"></div>
+</dialog>
 <script>
-const links=[...document.querySelectorAll('nav#sidebar a.item')];
-const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
-  links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));}})},
-  {rootMargin:'-10% 0px -80% 0px'});
-secs.forEach(s=>io.observe(s));
-const btn=document.getElementById('menubtn'),sb=document.getElementById('sidebar');
-if(btn){btn.addEventListener('click',()=>sb.classList.toggle('open'));
-  sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open');});}
+(function(){
+'use strict';
+var d=document,root=d.documentElement,body=d.body;
+root.classList.add('js');
+
+/* ---- ストレージ(file://等で失敗しても静かに無効化) ---- */
+function pickStore(name){try{var s=window[name];s.setItem('__t','1');s.removeItem('__t');return s}catch(e){return null}}
+var LS=pickStore('localStorage'),SS=pickStore('sessionStorage');
+function lsGet(k){try{return LS?LS.getItem(k):null}catch(e){return null}}
+function lsSet(k,v){try{LS&&LS.setItem(k,v)}catch(e){}}
+function ssGet(k){try{return SS?SS.getItem(k):null}catch(e){return null}}
+function ssSet(k,v){try{SS&&SS.setItem(k,v)}catch(e){}}
+
+/* ---- 要素 ---- */
+var titleEl=d.getElementById('topbar-title'),menubtn=d.getElementById('menubtn'),
+    searchbtn=d.getElementById('searchbtn'),sidebar=d.getElementById('sidebar'),
+    scrim=d.getElementById('scrim'),progress=d.querySelector('#progress i'),
+    totop=d.getElementById('totop'),navtools=d.getElementById('navtools'),
+    sections=[].slice.call(d.querySelectorAll('section.doc')),
+    navItems=[].slice.call(sidebar.querySelectorAll('a.item'));
+var navOf={};navItems.forEach(function(a){navOf[a.getAttribute('href').slice(1)]=a});
+var titleOf={};sections.forEach(function(s){var a=navOf[s.id];titleOf[s.id]=a?a.textContent.trim():s.id});
+var owner={};sections.forEach(function(s){owner[s.id]=s;
+  [].forEach.call(s.querySelectorAll('[id]'),function(el){owner[el.id]=s})});
+var mqMobile=window.matchMedia('(max-width:960px)');
+var noMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- 文字サイズ切替 ---- */
+navtools.hidden=false;
+var fs=lsGet('fs')||'';
+function applyFs(){fs?root.setAttribute('data-fs',fs):root.removeAttribute('data-fs');
+  [].forEach.call(d.querySelectorAll('#fs-switch button'),function(b){
+    b.setAttribute('aria-pressed',String((b.getAttribute('data-fs')||'')===fs))})}
+applyFs();
+[].forEach.call(d.querySelectorAll('#fs-switch button'),function(b){
+  b.addEventListener('click',function(){fs=b.getAttribute('data-fs')||'';lsSet('fs',fs);applyFs()})});
+
+/* ---- 表示モード(章ごと/通読) ---- */
+var modechk=d.getElementById('modechk');
+var mode=lsGet('mode')==='full'?'full':'chapter';
+function applyMode(){body.setAttribute('data-mode',mode);modechk.checked=(mode==='full')}
+modechk.addEventListener('change',function(){
+  mode=modechk.checked?'full':'chapter';lsSet('mode',mode);applyMode();route(true)});
+
+/* ---- ドロワー ---- */
+scrim.hidden=false;
+var lastFocus=null;
+function drawerOpen(){lastFocus=d.activeElement;sidebar.classList.add('open');body.classList.add('drawer-open');
+  menubtn.setAttribute('aria-expanded','true');
+  var f=sidebar.querySelector('a.item.active')||sidebar.querySelector('a.item');f&&f.focus()}
+function drawerClose(){sidebar.classList.remove('open');body.classList.remove('drawer-open');
+  menubtn.setAttribute('aria-expanded','false');
+  if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+function drawerIsOpen(){return sidebar.classList.contains('open')}
+menubtn.addEventListener('click',function(){drawerIsOpen()?drawerClose():drawerOpen()});
+scrim.addEventListener('click',drawerClose);
+sidebar.addEventListener('click',function(e){
+  if(e.target.closest&&e.target.closest('a.item')&&mqMobile.matches)drawerClose()});
+d.addEventListener('keydown',function(e){
+  if(!drawerIsOpen()||!mqMobile.matches)return;
+  if(e.key==='Escape'){drawerClose();return}
+  if(e.key==='Tab'){
+    var f=sidebar.querySelectorAll('a.item,button,input');
+    if(!f.length)return;
+    var first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&d.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&d.activeElement===last){e.preventDefault();first.focus()}
+  }
+});
+
+/* ---- 読了管理 ---- */
+var readSet={};try{readSet=JSON.parse(lsGet('read')||'{}')||{}}catch(e){readSet={}}
+function paintRead(){navItems.forEach(function(a){
+  a.classList.toggle('read',!!readSet[a.getAttribute('href').slice(1)])})}
+function markRead(id){if(readSet[id])return;readSet[id]=1;lsSet('read',JSON.stringify(readSet));paintRead()}
+paintRead();
+
+/* ---- 一時ハイライト ---- */
+function flash(el){if(!el)return;el.classList.remove('hitflash');void el.offsetWidth;
+  el.classList.add('hitflash');setTimeout(function(){el.classList.remove('hitflash')},1900)}
+
+/* ---- ルーター(章モード) ---- */
+var current=null;
+function targetFromHash(){
+  var h='';try{h=decodeURIComponent(location.hash.slice(1))}catch(e){h=location.hash.slice(1)}
+  if(h&&owner[h])return{sec:owner[h],el:d.getElementById(h)};
+  return{sec:sections[0],el:null};
+}
+function setActiveNav(id){navItems.forEach(function(a){
+  var on=a.getAttribute('href')==='#'+id;
+  a.classList.toggle('active',on);
+  if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+function paintCurrent(sec){
+  body.setAttribute('data-current',sec.id);
+  titleEl.textContent=titleOf[sec.id]||'';
+  setActiveNav(sec.id);
+  lsSet('lastChap',sec.id);
+}
+function jumpTo(y){
+  window.scrollTo(0,y);
+  /* ブラウザのフラグメントスクロール再試行に上書きされないよう次フレームでも適用 */
+  requestAnimationFrame(function(){window.scrollTo(0,y)});
+}
+function jumpToEl(el){el.scrollIntoView()}
+function route(force){
+  var t=targetFromHash(),sec=t.sec,changed=(sec!==current);
+  if(mode==='chapter'){
+    sections.forEach(function(s){s.classList.toggle('current',s===sec)});
+  }else{
+    sections.forEach(function(s){s.classList.remove('current')});
+  }
+  current=sec;paintCurrent(sec);
+  if(t.el&&t.el!==sec){jumpToEl(t.el);flash(t.el)}
+  else if(mode==='chapter'){
+    var y=changed||force?parseInt(ssGet('scroll:'+sec.id)||'0',10):0;
+    jumpTo(isNaN(y)?0:y);
+  }else if(t.el===sec){jumpToEl(sec)}
+  updateProgress();
+}
+window.addEventListener('hashchange',function(){route(false)});
+if(!location.hash){
+  var last=lsGet('lastChap');
+  if(last&&owner[last]&&last!==sections[0].id){try{location.replace('#'+last)}catch(e){}}
+}
+
+/* ---- スクロール: 進捗・読了・位置保存 ---- */
+function updateProgress(){
+  if(!progress)return;
+  var y=window.pageYOffset||root.scrollTop,vh=window.innerHeight,p=0;
+  if(mode==='chapter'&&current){
+    var r=current.getBoundingClientRect(),top=y+r.top,h=r.height;
+    p=h>0?(y+vh-top)/h:1;
+    if(p>=0.97)markRead(current.id);
+  }else{
+    var sh=root.scrollHeight;
+    p=sh>0?(y+vh)/sh:1;
+  }
+  progress.style.width=(Math.max(0,Math.min(1,p))*100).toFixed(1)+'%';
+}
+var ticking=false;
+window.addEventListener('scroll',function(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var y=window.pageYOffset||root.scrollTop;
+    body.classList.toggle('scrolled',y>500);
+    if(mode==='chapter'&&current)ssSet('scroll:'+current.id,String(Math.round(y)));
+    updateProgress();
+  });
+},{passive:true});
+window.addEventListener('resize',updateProgress,{passive:true});
+totop.addEventListener('click',function(e){e.preventDefault();
+  window.scrollTo({top:0,behavior:noMotion?'auto':'smooth'})});
+
+/* ---- 通読モード時のアクティブ章追従 ---- */
+if(window.IntersectionObserver){
+  var io=new IntersectionObserver(function(es){
+    if(mode!=='full')return;
+    es.forEach(function(en){if(en.isIntersecting){
+      current=en.target;paintCurrent(en.target)}})
+  },{rootMargin:'-15% 0px -75% 0px'});
+  sections.forEach(function(s){io.observe(s)});
+}
+
+/* ---- 前後章ナビ ---- */
+function mkChapLink(sec,cls,lbl){
+  var a=d.createElement('a');a.className=cls;a.href='#'+sec.id;
+  var dir=d.createElement('span');dir.className='dir';dir.textContent=lbl;
+  var t=d.createElement('span');t.className='t';t.textContent=titleOf[sec.id];
+  a.appendChild(dir);a.appendChild(t);return a;
+}
+sections.forEach(function(s,i){
+  var nav=d.createElement('div');nav.className='chapnav';
+  if(sections[i-1])nav.appendChild(mkChapLink(sections[i-1],'prev','← 前の章'));
+  if(sections[i+1])nav.appendChild(mkChapLink(sections[i+1],'next','次の章 →'));
+  if(nav.children.length)s.appendChild(nav);
+});
+
+/* ---- テーブル分類とスクロール補助 ---- */
+var hintsDone=!!lsGet('hintdone');
+function dismissHints(){if(hintsDone)return;hintsDone=true;lsSet('hintdone','1');
+  [].forEach.call(d.querySelectorAll('.tbl-hint'),function(h){h.parentNode&&h.parentNode.removeChild(h)})}
+function watchScroller(shell,sc){
+  function upd(){
+    var over=sc.scrollWidth>sc.clientWidth+2;
+    shell.classList.toggle('more-l',over&&sc.scrollLeft>4);
+    shell.classList.toggle('more-r',over&&sc.scrollLeft<sc.scrollWidth-sc.clientWidth-4);
+    if(over&&!hintsDone&&!shell.querySelector('.tbl-hint')){
+      var h=d.createElement('div');h.className='tbl-hint';
+      h.textContent='← 横にスクロールできます →';shell.appendChild(h);
+    }
+  }
+  sc.addEventListener('scroll',function(){
+    shell.classList.toggle('more-l',sc.scrollLeft>4);
+    shell.classList.toggle('more-r',sc.scrollLeft<sc.scrollWidth-sc.clientWidth-4);
+    dismissHints();
+  },{passive:true});
+  if(window.ResizeObserver)new ResizeObserver(upd).observe(sc);
+  upd();
+}
+function wrapShell(el){
+  var shell=d.createElement('div');shell.className='tableshell';
+  el.parentNode.insertBefore(shell,el);shell.appendChild(el);return shell;
+}
+[].forEach.call(d.querySelectorAll('main .tablewrap'),function(w){
+  var tbl=w.querySelector('table');if(!tbl)return;
+  var shell=wrapShell(w);
+  var rows=[].slice.call(tbl.rows);if(!rows.length)return;
+  var cols=0,maxLen=0;
+  rows.forEach(function(r){cols=Math.max(cols,r.cells.length);
+    [].forEach.call(r.cells,function(c){maxLen=Math.max(maxLen,c.textContent.trim().length)})});
+  var headCells=[].slice.call(rows[0].cells);
+  var hasHeader=headCells.length>0&&headCells.every(function(c){return c.tagName==='TH'});
+  if(hasHeader){rows[0].classList.add('hdr');
+    headCells.forEach(function(c){c.setAttribute('scope','col')})}
+  var manual=w.getAttribute('data-table'),kind;
+  if(manual==='card')kind='cards';
+  else if(manual==='scroll')kind='scroll';
+  else if(cols<=3&&maxLen>60&&hasHeader)kind='cards';
+  else if(cols>=4||maxLen>60)kind='scroll';
+  else kind='plain';
+  shell.setAttribute('data-tbl',kind);
+  if(kind==='cards'){
+    var labels=headCells.map(function(c){return c.textContent.trim()});
+    rows.slice(1).forEach(function(r){
+      [].forEach.call(r.cells,function(c,i){c.setAttribute('data-label',labels[i]||'')})});
+  }
+  if(kind==='scroll')watchScroller(shell,w);
+});
+[].forEach.call(d.querySelectorAll('main pre'),function(p){
+  var shell=wrapShell(p);shell.setAttribute('data-tbl','scroll');watchScroller(shell,p);
+});
+
+/* ---- 信頼性バッジのアクセシブルネーム ---- */
+[].forEach.call(d.querySelectorAll('span.ok,span.warn'),function(s){
+  var t=s.textContent.trim();
+  if(t==='✅'||t==='⚠️'){s.setAttribute('role','img');
+    s.setAttribute('aria-label',t==='✅'?'一次ソース確認済み':'未確認・二次情報')}
+});
+
+/* ---- 脚注・出典ボトムシート ---- */
+var refsheet=d.getElementById('refsheet'),refbody=d.getElementById('refsheet-body');
+var dialogOK=!!(refsheet&&typeof refsheet.showModal==='function');
+if(dialogOK){
+  d.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('main sup.cite a');
+    if(!a)return;
+    var href=a.getAttribute('href')||'';
+    if(href.charAt(0)!=='#')return;
+    var t=d.getElementById(href.slice(1));
+    if(!t)return;
+    e.preventDefault();
+    refbody.innerHTML='';
+    var clone=t.cloneNode(true);clone.removeAttribute('id');
+    refbody.appendChild(clone);
+    var go=d.createElement('p');go.className='golink';
+    var link=d.createElement('a');link.href=href;link.textContent='一覧の中で開く →';
+    link.addEventListener('click',function(){refsheet.close()});
+    go.appendChild(link);refbody.appendChild(go);
+    refsheet.showModal();
+  });
+  refsheet.querySelector('.close').addEventListener('click',function(){refsheet.close()});
+  refsheet.addEventListener('click',function(e){if(e.target===refsheet)refsheet.close()});
+}
+
+/* ---- 全文検索 ---- */
+var searchdlg=d.getElementById('searchdlg'),q=d.getElementById('q'),results=d.getElementById('results');
+if(dialogOK&&searchdlg&&typeof searchdlg.showModal==='function'){
+  searchbtn.hidden=false;
+  var index=null;
+  function norm(s){try{s=s.normalize('NFKC')}catch(e){}
+    return s.toLowerCase().replace(/\s+/g,' ').trim()}
+  function buildIndex(){
+    index=[];
+    sections.forEach(function(sec){
+      var anchor=sec.id;
+      [].forEach.call(sec.querySelectorAll('[id],h3,h4,p,li,td,blockquote'),function(el){
+        if(el.id)anchor=el.id;
+        if(!/^(H3|H4|P|LI|TD|BLOCKQUOTE)$/.test(el.tagName))return;
+        if(el.closest('.chapnav'))return;
+        if(el.tagName==='LI'&&el.querySelector('li'))return;
+        var raw=el.textContent.replace(/\s+/g,' ').trim();
+        if(raw.length<6)return;
+        index.push({n:norm(raw),raw:raw,sec:sec.id,anchor:anchor});
+      });
+    });
+  }
+  function runSearch(){
+    if(!index)buildIndex();
+    var qv=q.value.trim(),term=norm(qv);
+    results.innerHTML='';
+    if(term.length<2){
+      results.innerHTML='<p class="empty">2文字以上で検索できます</p>';return}
+    var byChap={},order=[],total=0;
+    for(var i=0;i<index.length&&total<50;i++){
+      var it=index[i],pos=it.n.indexOf(term);
+      if(pos<0)continue;
+      if(!byChap[it.sec]){byChap[it.sec]=[];order.push(it.sec)}
+      byChap[it.sec].push({it:it,pos:pos});total++;
+    }
+    if(!total){
+      var em=d.createElement('p');em.className='empty';
+      em.textContent='「'+qv+'」は見つかりませんでした';
+      results.appendChild(em);return}
+    order.forEach(function(secId){
+      var g=d.createElement('div');g.className='grp';
+      g.textContent=titleOf[secId]||secId;results.appendChild(g);
+      byChap[secId].forEach(function(m){results.appendChild(hitLink(m,qv,term))});
+    });
+  }
+  function hitLink(m,qv,term){
+    var a=d.createElement('a');a.className='hit';a.href='#'+m.it.anchor;
+    var raw=m.it.raw,p=raw.toLowerCase().indexOf(qv.toLowerCase());
+    var src,off,qlen;
+    if(p>=0&&qv){src=raw;off=p;qlen=qv.length}
+    else{src=m.it.n;off=m.pos;qlen=term.length}
+    var start=Math.max(0,off-36),end=Math.min(src.length,off+qlen+70);
+    a.appendChild(d.createTextNode((start>0?'…':'')+src.slice(start,off)));
+    var mk=d.createElement('mark');mk.textContent=src.slice(off,off+qlen);a.appendChild(mk);
+    a.appendChild(d.createTextNode(src.slice(off+qlen,end)+(end<src.length?'…':'')));
+    a.addEventListener('click',function(){searchdlg.close()});
+    return a;
+  }
+  var deb=null;
+  q.addEventListener('input',function(){clearTimeout(deb);deb=setTimeout(runSearch,160)});
+  d.getElementById('searchform').addEventListener('submit',function(e){e.preventDefault();runSearch()});
+  d.getElementById('searchclose').addEventListener('click',function(){searchdlg.close()});
+  searchdlg.addEventListener('click',function(e){if(e.target===searchdlg)searchdlg.close()});
+  searchbtn.addEventListener('click',function(){searchdlg.showModal();q.select();runSearch()});
+}
+
+/* ---- 初期化 ---- */
+applyMode();
+route(true);
+})();
 </script>
 </body>
 </html>
