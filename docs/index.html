@@ -18,7 +18,7 @@
   --quote-line:#c9a75a; --quote-bg:#fdf9ef; --quote-ink:#4c4432;
   --ok:#0b7a5c; --warn:#8a5410;
   --res-tag:#5a7b8d; --res-line:#8aa5b3; --ref-line:#7c6bb0;
-  --nav-bg:#122a38; --nav-ink:#cfdde6; --nav-line:#24455a; --nav-dim:#8fa9ba; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
+  --nav-bg:#122a38; --nav-ink:#cfdde6; --nav-line:#24455a; --nav-dim:#a3bccb; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
   --topbar-bg:#0f5e75; --topbar-ink:#ffffff; --focus:#1a7fa0;
   --hl:#ffe27a; --hl-ink:#3a2c00;
   --shadow:0 6px 24px rgba(15,40,55,.2);
@@ -34,7 +34,7 @@
     --quote-line:#a98d4b; --quote-bg:#211d10; --quote-ink:#e4d9bd;
     --ok:#5cc2a4; --warn:#e0a35c;
     --res-tag:#42606f; --res-line:#54707e; --ref-line:#9b8ccc;
-    --nav-bg:#0e2230; --nav-ink:#c5d5df; --nav-line:#24455a; --nav-dim:#7f9cb0; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
+    --nav-bg:#0e2230; --nav-ink:#c5d5df; --nav-line:#24455a; --nav-dim:#9ab4c4; --nav-hov:#1a3a4d; --nav-on:#4fc3a1;
     --topbar-bg:#0e2735; --topbar-ink:#e8f1f6; --focus:#6cbcd8;
     --hl:#8a6d1a; --hl-ink:#fff6dd;
     --shadow:0 6px 24px rgba(0,0,0,.55);
@@ -73,6 +73,10 @@ pre{background:var(--pre-bg);color:var(--pre-ink);padding:14px 16px;border-radiu
 #topbar button .i{font-size:1.05rem;line-height:1.1}
 #topbar button:hover{background:rgba(255,255,255,.15)}
 #topbar-title{flex:1;min-width:0;text-align:center;font-size:.9rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar-pos{flex:none;font-size:.68rem;opacity:.8;margin-right:2px}
+html[data-fs="xl"] #topbar{height:auto;min-height:calc(var(--topbar-h) + env(safe-area-inset-top));padding-top:calc(env(safe-area-inset-top) + 4px);padding-bottom:4px}
+html[data-fs="xl"] #topbar-title{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35;font-size:.8rem}
+html[data-fs="xl"] .tableshell[data-tbl="scroll"] table,html[data-fs="xl"] .tableshell[data-tbl="plain"] table{font-size:.8rem}
 #progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.18)}
 #progress i{display:block;height:100%;width:0;background:var(--nav-on)}
 /* ===== レイアウト ===== */
@@ -81,8 +85,10 @@ main{flex:1;min-width:0;max-width:980px;margin:0 auto;width:100%;
   padding:16px 14px calc(96px + env(safe-area-inset-bottom))}
 header.page h1{font-size:1.4rem;line-height:1.55;margin:6px 0 4px;word-break:auto-phrase}
 header.page .meta{color:var(--sub);font-size:.82rem}
-.legend{background:var(--warnbg);border:1px solid var(--quote-line);border-radius:12px;padding:14px 18px;margin:16px 0 24px;font-size:.85rem}
+.legend{background:var(--warnbg);border:1px solid var(--quote-line);border-radius:12px;padding:4px 18px;margin:16px 0 24px;font-size:.85rem}
 .legend b{color:var(--accent)}
+.legend summary{cursor:pointer;padding:10px 0;min-height:44px;display:flex;align-items:center;flex-wrap:wrap;gap:2px}
+.legend p{margin:2px 0 12px}
 /* ===== ドロワー / サイドバー ===== */
 nav#sidebar{position:fixed;z-index:120;top:0;bottom:0;left:0;width:min(320px,88vw);height:100dvh;
   transform:translateX(-105%);transition:transform .22s;visibility:hidden;
@@ -121,12 +127,12 @@ section.doc.res .chapter-tag{background:var(--res-tag)}
 @media (prefers-color-scheme:dark){section.doc.res .chapter-tag{color:#e8f1f6}}
 .src-note{color:var(--sub);font-size:.78rem;margin:6px 0 0}
 .minitoc{margin:14px 0 6px;display:flex;flex-wrap:wrap;gap:8px}
-.minitoc a{font-size:.8rem;background:var(--chip-bg);border:1px solid var(--chip-line);border-radius:99px;padding:9px 14px;color:var(--chip-ink);line-height:1.4}
+.minitoc a{font-size:.8rem;background:var(--chip-bg);border:1px solid var(--chip-line);border-radius:99px;padding:5px 15px;color:var(--chip-ink);line-height:1.4;display:inline-flex;align-items:center;min-height:44px}
 .minitoc a:hover{background:var(--chip-hov);text-decoration:none}
 h3{font-size:1.1rem;margin:34px 0 10px;padding-left:10px;border-left:4px solid var(--accent2);line-height:1.6;word-break:auto-phrase}
 h4{font-size:1rem;margin:24px 0 8px;color:var(--h4-ink);word-break:auto-phrase}
 p{margin:10px 0}
-p,li,blockquote{text-wrap:pretty;overflow-wrap:break-word}
+p,li,blockquote{text-wrap:pretty;word-break:auto-phrase;overflow-wrap:break-word}
 blockquote{margin:14px 0;padding:12px 16px;border-left:4px solid var(--quote-line);background:var(--quote-bg);border-radius:0 10px 10px 0;
   color:var(--quote-ink);font-size:.93rem}
 blockquote p{margin:0}
@@ -135,7 +141,10 @@ li{margin:6px 0}
 hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
 .ok{color:var(--ok)}
 .warn{color:var(--warn)}
-sup.cite a{font-size:.72rem;background:var(--xref-bg);border-radius:6px;padding:3px 6px;line-height:1;display:inline-block}
+sup.cite a{font-size:.72rem;background:var(--xref-bg);border-radius:6px;padding:3px 6px;line-height:1;display:inline-block;position:relative}
+sup.cite a::after{content:"";position:absolute;inset:-14px -10px}
+a.xref{position:relative}
+a.xref::after{content:"";position:absolute;inset:-8px -6px}
 p.refitem{font-size:.85rem;color:var(--ink);margin:8px 0;padding-left:2.4em;text-indent:-2.4em}
 #references h3{border-left-color:var(--ref-line)}
 #references ul{list-style:none;padding-left:6px}
@@ -167,7 +176,7 @@ tr:nth-child(even) td{background:var(--row-alt)}
   .tableshell[data-tbl="cards"] table,.tableshell[data-tbl="cards"] tbody{display:block;background:none}
   .tableshell[data-tbl="cards"] tr{display:block;border:1px solid var(--line);border-radius:12px;background:var(--card);margin:0 0 12px;padding:6px 14px 14px;box-shadow:0 1px 3px rgba(15,40,55,.07)}
   .tableshell[data-tbl="cards"] tr.hdr{display:none}
-  .tableshell[data-tbl="cards"] td{display:block;border:none;padding:9px 0 0;background:none!important}
+  .tableshell[data-tbl="cards"] td{display:block;border:none;padding:9px 0 0;background:none!important;line-height:1.8}
   .tableshell[data-tbl="cards"] td+td{border-top:1px dashed var(--line);margin-top:9px}
   .tableshell[data-tbl="cards"] td::before{content:attr(data-label);display:block;font-size:.76rem;font-weight:700;color:var(--accent);margin-bottom:2px}
 }
@@ -193,6 +202,8 @@ html.js body[data-mode="chapter"]:not([data-current="doc00"]) .legend{display:no
 /* ===== ダイアログ(脚注シート・検索) ===== */
 dialog{border:none;padding:0;background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
 dialog::backdrop{background:rgba(8,20,28,.55)}
+body:has(dialog[open]){overflow:hidden}
+body.drawer-open{overflow:hidden}
 #refsheet{width:min(680px,100%);margin:auto auto 0;border-radius:16px 16px 0 0;max-height:75dvh;display:flex;flex-direction:column}
 #refsheet:not([open]){display:none}
 #refsheet .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);flex:none}
@@ -209,6 +220,7 @@ dialog .close{min-height:44px;min-width:64px;border:none;background:var(--chip-b
 #results .grp{font-size:.78rem;color:var(--sub);margin:16px 2px 6px;letter-spacing:.05em;font-weight:700}
 #results a.hit{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:0 0 8px;color:var(--ink);font-size:.88rem;line-height:1.75}
 #results a.hit:hover{border-color:var(--accent);text-decoration:none}
+#results .hit-path{display:block;font-size:.72rem;color:var(--sub);margin-bottom:2px}
 #results .empty{color:var(--sub);text-align:center;padding:40px 0;font-size:.9rem}
 mark{background:var(--hl);color:var(--hl-ink);border-radius:3px;padding:0 1px}
 @keyframes hitflash{0%,55%{background:color-mix(in srgb,var(--hl) 42%,transparent)}100%{background:transparent}}
@@ -243,6 +255,7 @@ mark{background:var(--hl);color:var(--hl-ink);border-radius:3px;padding:0 1px}
 <header id="topbar">
   <button id="menubtn" type="button" aria-controls="sidebar" aria-expanded="false"><span class="i" aria-hidden="true">☰</span>目次</button>
   <div id="topbar-title">改善キット</div>
+  <span id="topbar-pos" hidden></span>
   <button id="searchbtn" type="button" hidden><span class="i" aria-hidden="true">🔍</span>検索</button>
   <div id="progress" aria-hidden="true"><i></i></div>
 </header>
@@ -279,7 +292,7 @@ mark{background:var(--hl);color:var(--hl-ink);border-radius:3px;padding:0 1px}
 <div id="scrim" hidden></div>
 <main id="content">
 <header class="page"><h1>訪問看護ステーション 情報管理・請求管理 改善キット(統合版)</h1><div class="meta">作成日: 2026-07-05 ─ 本編5資料+調査原資料6資料+統合参考文献を1ファイルに統合。「目次」ボタン・各章冒頭のチップ・章末の前後リンクから移動できます。</div></header>
-<div class="legend"><b>凡例と注意</b> ─ <span class="ok">✅</span>=一次ソース(e-Gov・厚労省・個人情報保護委員会・自治体公表資料等)で原文確認済み(2026年7月5日時点)/<span class="warn">⚠️</span>・【未確認】=二次情報・試算・類推(断定に使わない)。本資料は一般的な法令情報の整理であり法律相談の代替ではありません。重要な判断(エスカレーション・退職・通報等)の前には弁護士等への相談を推奨します。この資料に職場名・実名を書き足さないでください。</div>
+<details class="legend"><summary><b>凡例と注意</b> ─ <span class="ok">✅</span>=一次ソース確認済み/<span class="warn">⚠️</span>=未確認(タップで詳細)</summary><p><span class="ok">✅</span>=一次ソース(e-Gov・厚労省・個人情報保護委員会・自治体公表資料等)で原文確認済み(2026年7月5日時点)/<span class="warn">⚠️</span>・【未確認】=二次情報・試算・類推(断定に使わない)。本資料は一般的な法令情報の整理であり法律相談の代替ではありません。重要な判断(エスカレーション・退職・通報等)の前には弁護士等への相談を推奨します。この資料に職場名・実名を書き足さないでください。</p></details>
 <section class="doc" id="doc00"><h2 class="docttl"><span class="chapter-tag">第0章</span>00 サマリー ― 全体像を5分でつかむ</h2><p class="src-note">原本ファイル: <code>00_サマリー.md</code></p><div class="minitoc"><a href="#doc00-s1">1. 30秒でわかる全体像</a><a href="#doc00-s2">2. リスク早見表(何を破ると、何が起きるか)</a><a href="#doc00-s3">3. 対策: 3段階プラン(7名規模・月額)</a><a href="#doc00-s4">4. 行動計画: Phase 0〜3 + 撤退ライン</a><a href="#doc00-s5">5. 文書マップ(どれに何が書いてあるか)</a><a href="#doc00-s6">6. 信頼性の表記と取り扱い上の注意</a></div><p>作成日: 2026-07-05<br>本ファイルは各資料の要約です。金額・条文の根拠と出典はすべて各資料本文(01〜05、<code>_research/</code>)にあります。</p>
 <hr>
 <h3 id="doc00-s1">1. 30秒でわかる全体像</h3>
@@ -1107,7 +1120,8 @@ function drawerOpen(){lastFocus=d.activeElement;sidebar.classList.add('open');bo
   var f=sidebar.querySelector('a.item.active')||sidebar.querySelector('a.item');f&&f.focus()}
 function drawerClose(){sidebar.classList.remove('open');body.classList.remove('drawer-open');
   menubtn.setAttribute('aria-expanded','false');
-  if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+  var back=(lastFocus&&lastFocus!==body&&lastFocus.focus)?lastFocus:menubtn;
+  try{back.focus()}catch(e){}}
 function drawerIsOpen(){return sidebar.classList.contains('open')}
 menubtn.addEventListener('click',function(){drawerIsOpen()?drawerClose():drawerOpen()});
 scrim.addEventListener('click',drawerClose);
@@ -1147,9 +1161,11 @@ function setActiveNav(id){navItems.forEach(function(a){
   var on=a.getAttribute('href')==='#'+id;
   a.classList.toggle('active',on);
   if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+var posEl=d.getElementById('topbar-pos');posEl.hidden=false;
 function paintCurrent(sec){
   body.setAttribute('data-current',sec.id);
   titleEl.textContent=titleOf[sec.id]||'';
+  posEl.textContent=(sections.indexOf(sec)+1)+'/'+sections.length;
   setActiveNav(sec.id);
   lsSet('lastChap',sec.id);
 }
@@ -1159,7 +1175,11 @@ function jumpTo(y){
   requestAnimationFrame(function(){window.scrollTo(0,y)});
 }
 function jumpToEl(el){el.scrollIntoView()}
+var lastRoutedHash=null;
 function route(force){
+  /* lastChap復元(location.replace)直後の遅延hashchange等、同一ハッシュの再入では何もしない */
+  if(!force&&location.hash===lastRoutedHash)return;
+  lastRoutedHash=location.hash;
   var t=targetFromHash(),sec=t.sec,changed=(sec!==current);
   if(mode==='chapter'){
     sections.forEach(function(s){s.classList.toggle('current',s===sec)});
@@ -1330,15 +1350,16 @@ if(dialogOK&&searchdlg&&typeof searchdlg.showModal==='function'){
   function buildIndex(){
     index=[];
     sections.forEach(function(sec){
-      var anchor=sec.id;
+      var anchor=sec.id,head='';
       [].forEach.call(sec.querySelectorAll('[id],h3,h4,p,li,td,blockquote'),function(el){
         if(el.id)anchor=el.id;
+        if(/^H[34]$/.test(el.tagName))head=el.textContent.replace(/\s+/g,' ').trim();
         if(!/^(H3|H4|P|LI|TD|BLOCKQUOTE)$/.test(el.tagName))return;
         if(el.closest('.chapnav'))return;
         if(el.tagName==='LI'&&el.querySelector('li'))return;
         var raw=el.textContent.replace(/\s+/g,' ').trim();
         if(raw.length<6)return;
-        index.push({n:norm(raw),raw:raw,sec:sec.id,anchor:anchor});
+        index.push({n:norm(raw),raw:raw,sec:sec.id,anchor:anchor,head:head});
       });
     });
   }
@@ -1367,6 +1388,9 @@ if(dialogOK&&searchdlg&&typeof searchdlg.showModal==='function'){
   }
   function hitLink(m,qv,term){
     var a=d.createElement('a');a.className='hit';a.href='#'+m.it.anchor;
+    if(m.it.head&&m.it.head!==m.it.raw){
+      var hp=d.createElement('span');hp.className='hit-path';hp.textContent=m.it.head;a.appendChild(hp);
+    }
     var raw=m.it.raw,p=raw.toLowerCase().indexOf(qv.toLowerCase());
     var src,off,qlen;
     if(p>=0&&qv){src=raw;off=p;qlen=qv.length}
