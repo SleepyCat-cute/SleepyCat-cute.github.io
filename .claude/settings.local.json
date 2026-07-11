@@ -9,7 +9,12 @@
       "Bash(mkdir -p /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad)",
       "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0 Safari/537.36\" \"https://www.medical-care.net/misc/terms/medical\" -o /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/mcs_terms.html)",
       "Bash(python3 -c \"import PyPDF2\")",
-      "Bash(pdftotext -layout \"/Users/taitoito/.claude/projects/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/tool-results/webfetch-1783230486725-roxgvc.pdf\" /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/mhlw_v7_system.txt)"
+      "Bash(pdftotext -layout \"/Users/taitoito/.claude/projects/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/tool-results/webfetch-1783230486725-roxgvc.pdf\" /private/tmp/claude-501/-Users-taitoito-workspace--------/cd0e957a-cada-48c5-9d8f-1850953a9dfa/scratchpad/mhlw_v7_system.txt)",
+      "Bash(npm --version)",
+      "Bash(awk '/<section class=\"doc\"/{n++} {if\\(n\\)len[n]+=length\\($0\\)} END{for\\(i=1;i<=n;i++\\)print i, len[i]}' index.html)",
+      "Bash(cd \"/Users/taitoito/workspace/訪問看護_改善/docs\" && grep -n '<section class=\"doc\"' index.html | sed 's/\\\\\\(.\\\\{120\\\\}\\\\\\).*/\\\\1/' ; echo '--- sup.cite examples:'; grep -o '<sup class=\"cite\">[^<]*<a[^>]*>[^<]*</a></sup>' index.html | head -5; echo '--- refitem sample:'; grep -o '<p class=\"refitem\"[^>]*>' index.html | head -3; echo '--- README:'; cat ../README.md 2>/dev/null | head -40)",
+      "Bash(perl -ne 'while\\(/<table>\\(.*?\\)<\\\\/table>/g\\){$t=$1; if\\($t=~/^<tr>\\(.*?\\)<\\\\/tr>/\\){$r=$1; $n=\\(\\)=$r=~/<th>/g; print \"$n cols\\\\n\";}}' index.html)",
+      "Bash(mkdir -p /Users/taitoito/.claude/plans)"
     ]
   }
 }
